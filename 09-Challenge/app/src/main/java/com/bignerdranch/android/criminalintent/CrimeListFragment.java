@@ -11,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
@@ -54,7 +57,7 @@ public class CrimeListFragment extends Fragment {
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
+            mDateTextView.setText(getFormattedDate(mCrime.getDate()));
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }
 
@@ -63,6 +66,11 @@ public class CrimeListFragment extends Fragment {
             Toast.makeText(getActivity(),
                     mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT)
                     .show();
+        }
+
+        private String getFormattedDate(Date date) {
+            SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMM d, yyyy", Locale.US);
+            return formatter.format(date);
         }
     }
 
