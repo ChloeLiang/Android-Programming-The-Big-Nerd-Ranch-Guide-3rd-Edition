@@ -12,7 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
@@ -51,6 +54,7 @@ public class CrimeListFragment extends Fragment {
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTitleTextView;
         private TextView mDateTextView;
+        private TextView mTimeTextView;
         private ImageView mSolvedImageView;
         private Crime mCrime;
 
@@ -60,13 +64,15 @@ public class CrimeListFragment extends Fragment {
             itemView.setOnClickListener(this);
             mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
             mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+            mTimeTextView = (TextView) itemView.findViewById(R.id.crime_time);
             mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
         }
 
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
+            mDateTextView.setText(getDateString());
+            mTimeTextView.setText(getTimeString());
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }
 
@@ -74,6 +80,18 @@ public class CrimeListFragment extends Fragment {
         public void onClick(View view) {
             Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
+        }
+
+        private String getDateString() {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            String crimeDate = formatter.format(mCrime.getDate());
+            return crimeDate;
+        }
+
+        private String getTimeString() {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.US);
+            String crimeTime = formatter.format(mCrime.getTime());
+            return crimeTime;
         }
     }
 
