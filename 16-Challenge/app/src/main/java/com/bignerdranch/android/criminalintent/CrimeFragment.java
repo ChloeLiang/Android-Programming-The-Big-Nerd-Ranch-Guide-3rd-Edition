@@ -19,6 +19,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -31,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import static android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class CrimeFragment extends Fragment {
@@ -262,9 +264,17 @@ public class CrimeFragment extends Fragment {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
             mPhotoView.setImageDrawable(null);
         } else {
-            Bitmap bitmap = PictureUtils.getScaledBitmap(
-                    mPhotoFile.getPath(), getActivity());
-            mPhotoView.setImageBitmap(bitmap);
+            ViewTreeObserver observer = mPhotoView.getViewTreeObserver();
+            observer.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    int width = mPhotoView.getMeasuredWidth();
+                    int height = mPhotoView.getMeasuredHeight();
+                    Bitmap bitmap = PictureUtils.getScaledBitmap(
+                            mPhotoFile.getPath(), width, height);
+                    mPhotoView.setImageBitmap(bitmap);
+                }
+            });
         }
     }
 }
