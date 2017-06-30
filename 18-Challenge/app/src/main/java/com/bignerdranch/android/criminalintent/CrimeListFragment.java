@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 public class CrimeListFragment extends Fragment {
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
@@ -152,13 +154,24 @@ public class CrimeListFragment extends Fragment {
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
+            java.text.DateFormat dateFormat = java.text.DateFormat.getDateInstance(
+                    java.text.DateFormat.LONG, getCurrentLocale());
+            mDateTextView.setText(dateFormat.format(mCrime.getDate()));
             mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }
 
         @Override
         public void onClick(View view) {
             mCallbacks.onCrimeSelected(mCrime);
+        }
+
+        private Locale getCurrentLocale(){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                return getResources().getConfiguration().getLocales().get(0);
+            } else{
+                //noinspection deprecation
+                return getResources().getConfiguration().locale;
+            }
         }
     }
 
