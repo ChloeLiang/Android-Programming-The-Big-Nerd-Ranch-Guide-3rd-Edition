@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +53,22 @@ public class CrimeListFragment extends Fragment {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
         updateUI();
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                        ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+                    }
+                }
+        );
+        itemTouchHelper.attachToRecyclerView(mCrimeRecyclerView);
 
         return view;
     }
@@ -188,6 +205,11 @@ public class CrimeListFragment extends Fragment {
 
         public void setCrimes(List<Crime> crimes) {
             mCrimes = crimes;
+        }
+
+        public void onItemDismiss(int position) {
+            Crime crime = mCrimes.get(position);
+            CrimeLab.get(getActivity()).removeCrime(crime);
         }
     }
 }
