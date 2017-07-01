@@ -2,6 +2,7 @@ package com.bignerdranch.android.beatbox;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +14,18 @@ import com.bignerdranch.android.beatbox.databinding.FragmentBeatBoxBinding;
 import com.bignerdranch.android.beatbox.databinding.ListItemSoundBinding;
 
 public class BeatBoxFragment extends Fragment {
+
+    private BeatBox mBeatBox;
+
     public static BeatBoxFragment newInstance() {
         return new BeatBoxFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mBeatBox = new BeatBox(getActivity());
     }
 
     @Override
