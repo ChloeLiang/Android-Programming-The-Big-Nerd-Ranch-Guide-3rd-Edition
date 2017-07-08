@@ -74,4 +74,8 @@ public class LocatrFragment extends Fragment {
         super.onStop();
         mClient.disconnect();
     }
+
+    private void findImage() {
+
+    }
 }
