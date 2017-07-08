@@ -1,5 +1,6 @@
 package com.bignerdranch.android.sunset;
 
+import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
@@ -62,7 +63,16 @@ public class SunsetFragment extends Fragment {
                 .setDuration(3000);
         sunsetSkyAnimator.setEvaluator(new ArgbEvaluator());
 
-        heightAnimator.start();
-        sunsetSkyAnimator.start();
+        ObjectAnimator nightSkyAnimator = ObjectAnimator
+                .ofInt(mSkyView, "backgroundColor", mSunsetSkyColor, mNightSkyColor)
+                .setDuration(1500);
+        nightSkyAnimator.setEvaluator(new ArgbEvaluator());
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet
+                .play(heightAnimator)
+                .with(sunsetSkyAnimator)
+                .before(nightSkyAnimator);
+        animatorSet.start();
     }
 }
