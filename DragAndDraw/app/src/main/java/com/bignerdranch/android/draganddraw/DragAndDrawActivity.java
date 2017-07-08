@@ -1,13 +1,11 @@
 package com.bignerdranch.android.draganddraw;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
-public class DragAndDrawActivity extends AppCompatActivity {
+public class DragAndDrawActivity extends SingleFragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drag_and_draw);
+    protected Fragment createFragment() {
+        return DragAndDrawFragment.newInstance();
     }
 }
